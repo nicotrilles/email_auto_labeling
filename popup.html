@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gmail Auto-Labeler</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>Gmail Auto-Labeler</h1>
+        <p>Organize your emails automatically.</p>
+
+        <button id="addRuleBtn">+ Add Rule</button>
+
+        <!-- Saved rules appear here -->
+        <div id="rulesContainer"></div>
+
+        <!-- Rule form is separate -->
+        <div id="ruleForm" style="display: none;">
+
+            <h2 id="formTitle">New Rule</h2>
+
+            <label for="sender">Sender contains</label>
+            <input
+                type="text"
+                id="sender"
+                placeholder="example@gmail.com"
+            >
+
+            <label for="subject">Subject contains</label>
+            <input
+                type="text"
+                id="subject"
+                placeholder="Example keyword"
+            >
+
+            <label for="label">Gmail label</label>
+            <input
+                type="text"
+                id="label"
+                placeholder="School"
+            >
+
+            <button id="saveRuleBtn">Save Rule</button>
+
+        </div>
+
+    </div>
+
+    <script src="popup.js"></script>
+
+</body>
+</html>

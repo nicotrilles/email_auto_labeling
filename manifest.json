@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "Gmail Auto-Labeler",
+  "version": "1.0.0",
+  "description": "Automatically organize Gmail messages using custom rules.",
+  "permissions": [
+    "storage"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
