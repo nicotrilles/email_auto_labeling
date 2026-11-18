@@ -11,43 +11,68 @@
 
     <div class="container">
 
-        <h1>Gmail Auto-Labeler</h1>
-        <p>Organize your emails automatically.</p>
+        <header class="header">
+            <div>
+                <h1>Gmail Auto-Labeler</h1>
+                <p>Keep your inbox organized automatically.</p>
+            </div>
+        </header>
 
-        <button id="addRuleBtn">+ Add Rule</button>
+        <button id="addRuleBtn" class="primary-btn">
+            + Create New Rule
+        </button>
 
-        <!-- Saved rules appear here -->
-        <div id="rulesContainer"></div>
+        <section class="rules-section">
+            <h2>Your Rules</h2>
+            <div id="rulesContainer"></div>
+        </section>
 
-        <!-- Rule form is separate -->
-        <div id="ruleForm" style="display: none;">
+        <section id="ruleForm" class="form-section" style="display: none;">
 
             <h2 id="formTitle">New Rule</h2>
 
-            <label for="sender">Sender contains</label>
-            <input
-                type="text"
-                id="sender"
-                placeholder="example@gmail.com"
-            >
+            <div class="form-group">
+                <label for="sender">Sender contains</label>
+                <input
+                    type="text"
+                    id="sender"
+                    placeholder="example@gmail.com"
+                >
+            </div>
 
-            <label for="subject">Subject contains</label>
-            <input
-                type="text"
-                id="subject"
-                placeholder="Example keyword"
-            >
+            <div class="form-group">
+                <label for="subject">Subject contains</label>
+                <input
+                    type="text"
+                    id="subject"
+                    placeholder="Example keyword"
+                >
+            </div>
 
-            <label for="label">Gmail label</label>
-            <input
-                type="text"
-                id="label"
-                placeholder="School"
-            >
+            <div class="form-group">
+                <label for="label">Gmail label</label>
+                <input
+                    type="text"
+                    id="label"
+                    placeholder="School"
+                >
+            </div>
 
-            <button id="saveRuleBtn">Save Rule</button>
+            <div class="form-actions">
+                <button id="saveRuleBtn" class="primary-btn">
+                    Save Rule
+                </button>
 
-        </div>
+                <button id="cancelBtn" class="secondary-btn">
+                    Cancel
+                </button>
+            </div>
+
+        </section>
+
+        <footer>
+            <p>Gmail Auto-Labeler · Version 1.0</p>
+        </footer>
 
     </div>
 
