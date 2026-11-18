@@ -4,20 +4,38 @@ const ruleForm = document.getElementById("ruleForm");
 const saveRuleBtn = document.getElementById("saveRuleBtn");
 const rulesContainer = document.getElementById("rulesContainer");
 const formTitle = document.getElementById("formTitle");
+const cancelBtn = document.getElementById("cancelBtn");
 
-// Tracks which rule is being edited.
-// null means we are creating a new rule.
 let editingIndex = null;
 
 
-// Show form for creating a rule
-addRuleBtn.addEventListener("click", function() {
+// Reset the form
+function resetForm() {
+    document.getElementById("sender").value = "";
+    document.getElementById("subject").value = "";
+    document.getElementById("label").value = "";
+
     editingIndex = null;
 
     formTitle.textContent = "New Rule";
     saveRuleBtn.textContent = "Save Rule";
 
+    ruleForm.style.display = "none";
+}
+
+
+// Open form for creating a rule
+addRuleBtn.addEventListener("click", function() {
+    resetForm();
+
+    formTitle.textContent = "New Rule";
     ruleForm.style.display = "block";
+});
+
+
+// Cancel editing or creating
+cancelBtn.addEventListener("click", function() {
+    resetForm();
 });
 
 
@@ -28,39 +46,71 @@ async function displayRules() {
 
     rulesContainer.replaceChildren();
 
-    rules.forEach(function(rule, index) {
-        const ruleElement = document.createElement("div");
+    if (rules.length === 0) {
+        const emptyMessage = document.createElement("div");
 
-        const title = document.createElement("strong");
+        emptyMessage.className = "empty-state";
+        emptyMessage.textContent =
+            "No rules yet. Create your first rule!";
+
+        rulesContainer.appendChild(emptyMessage);
+        return;
+    }
+
+    rules.forEach(function(rule, index) {
+
+        const ruleCard = document.createElement("div");
+        ruleCard.className = "rule-card";
+
+        // Rule title
+        const title = document.createElement("div");
+        title.className = "rule-title";
         title.textContent = rule.label;
 
-        const sender = document.createElement("p");
+        // Rule details
+        const details = document.createElement("div");
+        details.className = "rule-details";
+
+        const sender = document.createElement("div");
         sender.textContent = "Sender: " + (rule.sender || "Any");
 
-        const subject = document.createElement("p");
+        const subject = document.createElement("div");
         subject.textContent = "Subject: " + (rule.subject || "Any");
+
+        details.append(sender, subject);
+
+        // Action buttons
+        const actions = document.createElement("div");
+        actions.className = "rule-actions";
 
         // Edit button
         const editBtn = document.createElement("button");
+
+        editBtn.className = "edit-btn";
         editBtn.textContent = "Edit";
 
-editBtn.addEventListener("click", function() {
-    alert("Edit button clicked!");
+        editBtn.addEventListener("click", function() {
+            editingIndex = index;
 
-    editingIndex = index;
+            document.getElementById("sender").value =
+                rule.sender || "";
 
-    document.getElementById("sender").value = rule.sender;
-    document.getElementById("subject").value = rule.subject;
-    document.getElementById("label").value = rule.label;
+            document.getElementById("subject").value =
+                rule.subject || "";
 
-    formTitle.textContent = "Edit Rule";
-    saveRuleBtn.textContent = "Update Rule";
+            document.getElementById("label").value =
+                rule.label || "";
 
-    ruleForm.style.display = "block";
-});
+            formTitle.textContent = "Edit Rule";
+            saveRuleBtn.textContent = "Update Rule";
+
+            ruleForm.style.display = "block";
+        });
 
         // Delete button
         const deleteBtn = document.createElement("button");
+
+        deleteBtn.className = "delete-btn";
         deleteBtn.textContent = "Delete";
 
         deleteBtn.addEventListener("click", async function() {
@@ -76,25 +126,23 @@ editBtn.addEventListener("click", function() {
             await displayRules();
         });
 
-        ruleElement.append(
-            title,
-            sender,
-            subject,
-            editBtn,
-            deleteBtn
-        );
+        actions.append(editBtn, deleteBtn);
 
-        rulesContainer.appendChild(ruleElement);
+        ruleCard.append(title, details, actions);
+
+        rulesContainer.appendChild(ruleCard);
     });
 }
 
 
 // Save or update a rule
 saveRuleBtn.addEventListener("click", async function() {
+
     const sender = document.getElementById("sender").value.trim();
     const subject = document.getElementById("subject").value.trim();
     const label = document.getElementById("label").value.trim();
 
+    // Validate inputs
     if (!label || (!sender && !subject)) {
         alert("Enter a label and at least one matching condition.");
         return;
@@ -117,24 +165,18 @@ saveRuleBtn.addEventListener("click", async function() {
         rules[editingIndex] = ruleData;
     }
 
+    // Save to Edge storage
     await chrome.storage.local.set({
         rules: rules
     });
 
-    // Reset the form
-    document.getElementById("sender").value = "";
-    document.getElementById("subject").value = "";
-    document.getElementById("label").value = "";
+    // Close and reset form
+    resetForm();
 
-    editingIndex = null;
-
-    formTitle.textContent = "New Rule";
-    saveRuleBtn.textContent = "Save Rule";
-    ruleForm.style.display = "none";
-
+    // Refresh displayed rules
     await displayRules();
 });
 
 
-// Load rules when popup opens
+// Load saved rules when popup opens
 displayRules();
