@@ -4,8 +4,15 @@
   "version": "1.0.0",
   "description": "Automatically organize Gmail messages using custom rules.",
   "permissions": [
-    "storage"
+    "storage",
+    "alarms"
   ],
+  "host_permissions": [
+    "http://127.0.0.1:5000/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "action": {
     "default_popup": "popup.html"
   }
