@@ -1,0 +1,8 @@
+# OAuth credentials and tokens
+backend/credential.json
+backend/token.json
+
+# Python environment
+.venv/
+__pycache__/
+*.pyc

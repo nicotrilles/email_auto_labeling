@@ -178,5 +178,35 @@ saveRuleBtn.addEventListener("click", async function() {
 });
 
 
+async function syncRulesWithBackend() {
+    // Get rules saved in Edge storage
+    const result = await chrome.storage.local.get("rules");
+    const rules = result.rules || [];
+
+    try {
+        // Send rules to the Python backend
+        const response = await fetch(
+            "http://127.0.0.1:5000/api/rules",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    rules: rules
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        console.log("Backend response:", data);
+
+    } catch (error) {
+        console.error("Could not connect to backend:", error);
+    }
+}
+
+syncRulesWithBackend();
 // Load saved rules when popup opens
 displayRules();
